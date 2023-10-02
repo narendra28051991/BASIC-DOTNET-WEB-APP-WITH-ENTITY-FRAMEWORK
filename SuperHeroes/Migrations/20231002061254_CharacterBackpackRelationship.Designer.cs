@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SuperHeroes.Data;
 
@@ -10,9 +11,11 @@ using SuperHeroes.Data;
 namespace SuperHeroes.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231002061254_CharacterBackpackRelationship")]
+    partial class CharacterBackpackRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,21 +23,6 @@ namespace SuperHeroes.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CharacterWeapon", b =>
-                {
-                    b.Property<int>("CharactersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WeaponsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CharactersId", "WeaponsId");
-
-                    b.HasIndex("WeaponsId");
-
-                    b.ToTable("CharacterWeapon");
-                });
 
             modelBuilder.Entity("SuperHeroes.Models.Backpack", b =>
                 {
@@ -105,43 +93,6 @@ namespace SuperHeroes.Migrations
                     b.ToTable("SuperHeroes");
                 });
 
-            modelBuilder.Entity("SuperHeroes.Models.Weapon", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BackpackId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BackpackId");
-
-                    b.ToTable("Weapons");
-                });
-
-            modelBuilder.Entity("CharacterWeapon", b =>
-                {
-                    b.HasOne("SuperHeroes.Models.Character", null)
-                        .WithMany()
-                        .HasForeignKey("CharactersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SuperHeroes.Models.Weapon", null)
-                        .WithMany()
-                        .HasForeignKey("WeaponsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SuperHeroes.Models.Backpack", b =>
                 {
                     b.HasOne("SuperHeroes.Models.Character", "Character")
@@ -151,17 +102,6 @@ namespace SuperHeroes.Migrations
                         .IsRequired();
 
                     b.Navigation("Character");
-                });
-
-            modelBuilder.Entity("SuperHeroes.Models.Weapon", b =>
-                {
-                    b.HasOne("SuperHeroes.Models.Backpack", "Backpack")
-                        .WithMany()
-                        .HasForeignKey("BackpackId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Backpack");
                 });
 
             modelBuilder.Entity("SuperHeroes.Models.Character", b =>
